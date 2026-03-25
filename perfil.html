@@ -2,22 +2,682 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Perfil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yair Araujo - Desarrollador de Software</title>
+    
+    <!-- =============================================
+         ESTILOS GLOBALES Y RESPONSIVE
+         ============================================= -->
+    <style>
+        /* ===== VARIABLES CSS PERSONALIZADAS ===== */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #a855f7;
+            --accent-color: #0ea5e9;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== RESET Y ESTILOS BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f35 50%, #16213e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Efecto de fondo animado */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SECCIÓN PRESENTACIÓN ===== */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+        }
+
+        .hero-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin: 0 auto 25px;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 70px rgba(168, 85, 247, 0.8);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ===== TARJETAS (CARDS) ===== */
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-color);
+            box-shadow: 0 30px 70px rgba(99, 102, 241, 0.3);
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-light);
+        }
+
+        .card h2::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+            border-radius: 2px;
+        }
+
+        /* ===== SECCIÓN SOBRE MÍ ===== */
+        .about-content {
+            display: grid;
+            gap: 20px;
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== BADGEST/PILLS DE HABILIDADES ===== */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+            border: 1.5px solid var(--primary-color);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-badge:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4));
+        }
+
+        .skill-badge:hover::before {
+            left: 100%;
+        }
+
+        /* ===== LISTA DE CONOCIMIENTOS ===== */
+        .knowledge-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .knowledge-item {
+            padding: 15px;
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            color: var(--text-muted);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .knowledge-item::before {
+            content: '→';
+            position: absolute;
+            left: 10px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .knowledge-item:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-left-color: var(--accent-color);
+            transform: translateX(10px);
+            color: var(--text-light);
+        }
+
+        .knowledge-item:hover::before {
+            opacity: 1;
+        }
+
+        /* ===== SECCIÓN CONTACTO ===== */
+        .contact-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .contact-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 45px rgba(99, 102, 241, 0.5);
+        }
+
+        .contact-link::before {
+            font-size: 1.3rem;
+        }
+
+        /* ===== PIE DE PÁGINA ===== */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(51, 65, 85, 0.3);
+            margin-top: 60px;
+            font-size: 0.95rem;
+            animation: fadeIn 1.5s ease-out 1s both;
+        }
+
+        .footer-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            margin: 0 auto 20px;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .hero {
+                padding: 25px 15px;
+                margin-bottom: 40px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .card h2 {
+                font-size: 1.5rem;
+            }
+
+            .skills-grid {
+                gap: 10px;
+            }
+
+            .skill-badge {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .knowledge-list {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .hero {
+                padding: 20px 10px;
+                margin-bottom: 30px;
+            }
+
+            .hero-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
+            }
+
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+            }
+
+            .card {
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 12px;
+            }
+
+            .card h2 {
+                font-size: 1.3rem;
+            }
+
+            .skills-grid {
+                gap: 8px;
+            }
+
+            .skill-badge {
+                padding: 7px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ===== ANIMACIONES ADICIONALES ===== */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .card:nth-child(1) {
+            animation-name: slideInLeft;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- =============================================
+         SECCIÓN PRESENTACIÓN (HERO)
+         ============================================= -->
+    <div class="container">
+        <section class="hero">
+            <div class="hero-avatar">👨‍💻</div>
+            <h1>Yair Araujo</h1>
+            <div class="hero-subtitle">Desarrollador de Software</div>
+            <p class="hero-description">
+                Estudiante apasionado de Diseño y Desarrollo de Software en Tecsup, 
+                especializado en crear soluciones innovadoras.
+            </p>
+        </section>
 
-    <h1>Hola, soy Yair Araujo 👋</h1>
-    <p>Estudiante de Tecsup - Software</p>
+        <!-- =============================================
+             SECCIÓN SOBRE MÍ
+             ============================================= -->
+        <section class="card">
+            <h2>🚀 Sobre Mí</h2>
+            <div class="about-content">
+                <p>
+                    Me apasiona la programación y el desarrollo de software. Disfruto aprender nuevas tecnologías 
+                    y enfrentar desafíos que me permitan mejorar constantemente. Me considero una persona organizada, 
+                    empática y con un fuerte enfoque en la superación personal y el aprendizaje continuo.
+                </p>
+                <p>
+                    En mi tiempo libre disfruto escuchando música, especialmente de Avicii, jugando videojuegos 
+                    relacionados con el fútbol y viendo películas. Siempre busco mantener una actitud positiva 
+                    y aprender algo nuevo cada día.
+                </p>
+            </div>
+        </section>
 
-    <h2>Sobre mí</h2>
-    <p>Me gusta programar, jugar videojuegos y aprender nuevas tecnologías.</p>
+        <!-- =============================================
+             SECCIÓN HABILIDADES TÉCNICAS
+             ============================================= -->
+        <section class="card">
+            <h2>💻 Habilidades Técnicas</h2>
+            <div class="skills-grid">
+                <span class="skill-badge">🐍 Python</span>
+                <span class="skill-badge">📘 Kotlin</span>
+                <span class="skill-badge">🔴 PHP</span>
+                <span class="skill-badge">✨ JavaScript</span>
+                <span class="skill-badge">🗄️ SQL</span>
+                <span class="skill-badge">🍃 MongoDB</span>
+            </div>
+        </section>
 
-    <h2>Habilidades</h2>
-    <ul>
-        <li>JavaScript</li>
-        <li>Python</li>
-        <li>SQL</li>
-    </ul>
+        <!-- =============================================
+             SECCIÓN CONOCIMIENTOS
+             ============================================= -->
+        <section class="card">
+            <h2>📚 Conocimientos</h2>
+            <div class="knowledge-list">
+                <div class="knowledge-item">🌐 Desarrollo de aplicaciones web</div>
+                <div class="knowledge-item">📊 Estructuras de datos y algoritmos</div>
+                <div class="knowledge-item">💾 Bases de datos relacionales y no relacionales</div>
+                <div class="knowledge-item">🔄 Control de versiones con Git</div>
+            </div>
+        </section>
 
+        <!-- =============================================
+             SECCIÓN OBJETIVO PROFESIONAL
+             ============================================= -->
+        <section class="card">
+            <h2>🎯 Objetivo Profesional</h2>
+            <p style="color: var(--text-muted); line-height: 1.8; font-size: 1.05rem;">
+                Mi objetivo es convertirme en un desarrollador de software competente y versátil, capaz de crear 
+                soluciones innovadoras y escalables que ayuden a resolver problemas reales. Tengo especial interés 
+                en contribuir a proyectos que impacten positivamente en sectores como el comercio y la tecnología digital.
+            </p>
+        </section>
+
+        <!-- =============================================
+             SECCIÓN CONTACTO
+             ============================================= -->
+        <section class="card">
+            <h2>📩 Contacto</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 1rem;">
+                ¿Quieres conectar conmigo? Aquí tienes mis canales de contacto:
+            </p>
+            <div class="contact-links">
+                <a href="yair.araujo@tecsup.edu.pe" class="contact-link">
+                    <span>📧</span> Email
+                </a>
+                <a href="https://github.com/yag-smith/" target="_blank" class="contact-link">
+                    <span>🐙</span> GitHub
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="contact-link">
+                    <span>💼</span> LinkedIn
+                </a>
+            </div>
+        </section>
+
+        <!-- =============================================
+             PIE DE PÁGINA
+             ============================================= -->
+        <footer class="footer">
+            <div class="footer-divider"></div>
+            <p>© 2026 - Yair Araujo | Desarrollador de Software</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">Hecho con ❤️ y mucha pasión por la programación</p>
+        </footer>
+    </div>
+
+    <!-- =============================================
+         JAVASCRIPT - EFECTOS DINÁMICOS
+         ============================================= -->
+    <script>
+        // Detectar cuando los elementos entran en el viewport (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos los elementos con clase card
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // Efecto hover interactivo en skill badges
+        const skillBadges = document.querySelectorAll('.skill-badge');
+        
+        skillBadges.forEach(badge => {
+            badge.addEventListener('click', function() {
+                // Crear partículas al hacer clic
+                createParticles(this);
+            });
+        });
+
+        // Función para crear efecto de partículas
+        function createParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const particleCount = 8;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = rect.left + rect.width / 2 + 'px';
+                particle.style.top = rect.top + rect.height / 2 + 'px';
+                particle.style.width = '10px';
+                particle.style.height = '10px';
+                particle.style.background = 'linear-gradient(135deg, #6366f1, #a855f7)';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '9999';
+
+                const angle = (i / particleCount) * Math.PI * 2;
+                const velocity = 5;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                document.body.appendChild(particle);
+
+                let x = rect.left + rect.width / 2;
+                let y = rect.top + rect.height / 2;
+                let opacity = 1;
+                let life = 30;
+
+                const animate = () => {
+                    x += vx;
+                    y += vy;
+                    opacity -= 1 / life;
+
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.opacity = opacity;
+
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        particle.remove();
+                    }
+                };
+
+                animate();
+            }
+        }
+
+        // Smooth scroll para navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Efecto de tipografía - revelar texto gradualmente
+        function typeEffect(element, speed = 50) {
+            const text = element.textContent;
+            element.textContent = '';
+            let index = 0;
+
+            const type = () => {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, speed);
+                }
+            };
+
+            type();
+        }
+
+        // Activar efecto de tipografía en el h1
+        window.addEventListener('load', () => {
+            const h1 = document.querySelector('.hero h1');
+            if (h1) {
+                // Comentado para no ralentizar la carga
+                // typeEffect(h1, 30);
+            }
+        });
+
+        // Efecto de clic en cualquier parte de la página
+        document.addEventListener('click', (e) => {
+            // Solo crear partículas en skill badges
+            if (e.target.classList.contains('skill-badge')) {
+                createParticles(e.target);
+            }
+        });
+    </script>
 </body>
 </html>
